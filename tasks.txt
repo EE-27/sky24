@@ -1,0 +1,19 @@
+Task 1
+    Create a new Django project, connect DRF and make all necessary settings.
+
+Task 2
+    Create the following models:
+
+* User: all fields from a normal user, but replace authorisation with email; phone number; city; avatar.
+* Course: title, preview (picture), description.
+* Lesson: title, description, preview (picture), link to video.
+
+Task 3
+    Describe CRUD
+* for course and lesson models, but for course do it via ViewSets, and for lesson - via Generic classes.
+
+
+For the operation of controllers, describe the simplest serializers.
+The work of each endpoint should be checked with Postman.
+Also at this stage of work we do not care about security and do not close objects and models
+from editing even by the simplest authorisation.
