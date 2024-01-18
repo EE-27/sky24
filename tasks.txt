@@ -1,19 +1,21 @@
 Task 1
-    Create a new Django project, connect DRF and make all necessary settings.
+    For the course model, add a field to the serializer to display the number of lessons.
 
 Task 2
-    Create the following models:
+    Add a new model "Payments" with the following fields:
+* user,
+* payment date,
+* paid course or lesson,
+* payment amount,
+* payment method: cash or transfer to account.
 
-* User: all fields from a normal user, but replace authorisation with email; phone number; city; avatar.
-* Course: title, preview (picture), description.
-* Lesson: title, description, preview (picture), link to video.
+    Write data to this model via the fixtur tool or custom command.
 
 Task 3
-    Describe CRUD
-* for course and lesson models, but for course do it via ViewSets, and for lesson - via Generic classes.
+    Implement a lesson output field for the course model serializer.
 
-
-For the operation of controllers, describe the simplest serializers.
-The work of each endpoint should be checked with Postman.
-Also at this stage of work we do not care about security and do not close objects and models
-from editing even by the simplest authorisation.
+Task 4
+    Set up filtering for the endpoints of the payment list output with the ability to:
+* change sort order by payment date,
+* filter by course or lesson,
+* filter by payment method.
