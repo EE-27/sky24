@@ -1,0 +1,46 @@
+[
+  {
+    "model": "school.payments",
+    "pk": 1,
+    "fields": {
+      "user": "Honza",
+      "payment_date": "2024-01-18",
+      "course_or_lesson": "course",
+      "payment_amount": 500,
+      "payment_method": "cash"
+    }
+  },
+  {
+    "model": "school.payments",
+    "pk": 2,
+    "fields": {
+      "user": "Stázka",
+      "payment_date": "2024-01-15",
+      "course_or_lesson": "course",
+      "payment_amount": 750,
+      "payment_method": "cash"
+    }
+  },
+  {
+    "model": "school.payments",
+    "pk": 3,
+    "fields": {
+      "user": "Arisu",
+      "payment_date": "2020-04-20",
+      "course_or_lesson": "lesson",
+      "payment_amount": 1400,
+      "payment_method": "transfer"
+    }
+  },
+  {
+    "model": "school.payments",
+    "pk": 4,
+    "fields": {
+      "user": "Usagi",
+      "payment_date": "2018-08-12",
+      "course_or_lesson": "lesson",
+      "payment_amount": 125,
+      "payment_method": "transfer"
+    }
+  }
+]
