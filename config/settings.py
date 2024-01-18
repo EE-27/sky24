@@ -42,6 +42,8 @@ INSTALLED_APPS = [
 
     "users",
     "school",
+
+    "django_filters"  # pip3 install django-filter
 ]
 
 MIDDLEWARE = [
