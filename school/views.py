@@ -1,6 +1,7 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from school.models import Course, Lesson, Payments
 from school.serializers import CourseSerializer, LessonSerializer, PaymentsSerializer
@@ -10,17 +11,19 @@ from school.serializers import CourseSerializer, LessonSerializer, PaymentsSeria
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
+    permission_classes = [IsAuthenticated]  # takhle se zamnkne, teď /courses/ může vidět jen s Acces_token
 
 
 # pro generics takto:
 class LessonCreateAPIView(generics.CreateAPIView):  # POST
     serializer_class = LessonSerializer
     # neni potřeba queryset
-
+    permission_classes = [IsAuthenticated]
 
 class LessonListAPIView(generics.ListAPIView):  # GET
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    permission_classes = [AllowAny]
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):  # GET
@@ -31,12 +34,13 @@ class LessonRetrieveAPIView(generics.RetrieveAPIView):  # GET
 class LessonUpdateAPIView(generics.UpdateAPIView):  # PATCH (může být 1 field)
     serializer_class = LessonSerializer             # PUT (chce všechno)
     queryset = Lesson.objects.all()
+    permission_classes = [IsAuthenticated]
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):  # DELETE
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()  # Maslov ve videu o Generics tenhle řádek nemá,
-                                     # mně to nešlo bez něj ¯\_(ツ)_/¯
+    permission_classes = [IsAuthenticated]  # mně to nešlo bez něj ¯\_(ツ)_/¯
 
 
 class PaymentsListAPIView(generics.ListAPIView):

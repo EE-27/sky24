@@ -3,8 +3,8 @@ from django.urls import path
 from school.apps import SchoolConfig
 from rest_framework.routers import DefaultRouter
 
-from school.views import CourseViewSet, LessonCreateAPIView, LessonListAPIView, LessonRetrieveAPIView, \
-    LessonUpdateAPIView, LessonDestroyAPIView, PaymentsListAPIView
+from school.views import (CourseViewSet, LessonCreateAPIView, LessonListAPIView, LessonRetrieveAPIView,
+                          LessonUpdateAPIView, LessonDestroyAPIView, PaymentsListAPIView)
 
 app_name = SchoolConfig.name
 

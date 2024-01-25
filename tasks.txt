@@ -1,21 +1,12 @@
 Task 1
-    For the course model, add a field to the serializer to display the number of lessons.
+    Configure the project to use JWT authorisation and close each endpoint with authorisation.
 
 Task 2
-    Add a new model "Payments" with the following fields:
-* user,
-* payment date,
-* paid course or lesson,
-* payment amount,
-* payment method: cash or transfer to account.
-
-    Write data to this model via the fixtur tool or custom command.
+    Create a moderator group and give it rights to work with any lessons or courses,
+    but without the ability to delete or create new ones. Put the functionality of such a check into controllers.
 
 Task 3
-    Implement a lesson output field for the course model serializer.
+    Describe access rights for objects so that users who are not members of the moderators group can see
+    and edit only their own courses and lessons.
 
-Task 4
-    Set up filtering for the endpoints of the payment list output with the ability to:
-* change sort order by payment date,
-* filter by course or lesson,
-* filter by payment method.
+    It is better to start groups through the admin and not to implement additional endpoints for this purpose.

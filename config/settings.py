@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     "users",
     "school",
 
-    "django_filters"  # pip3 install django-filter
+    "django_filters",  # pip3 install django-filter
+    "rest_framework_simplejwt",  # pip3 install djangorestframework-simplejwt
 ]
 
 MIDDLEWARE = [
@@ -128,3 +129,15 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "users.User"
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+         "rest_framework.permissions.AllowAny"
+            # AllowAny - teď to pustí všechny
+
+        # 'rest_framework.permissions.IsAuthenticated',
+    ]  # v Postman, teď všechno chce: v Headers napsat: Authorization: Bearer <<access_token>> z /users/api/token/
+}
