@@ -27,7 +27,7 @@ class CourseSerializer(serializers.ModelSerializer):
     # přidat výstup pro lekce: LessonSerializer hodit nahoru, protože ho tady callujeme
     # pak přidat source, zase díky: related_name="lessons", abych mohl callovat lekce přes Course
     # a many=True, protože Maslov...
-    lesson = LessonSerializer(source="lessons", many=True)
+    lesson = LessonSerializer(source="lessons", many=True, read_only=True)
 
     class Meta:
         model = Course

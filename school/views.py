@@ -4,7 +4,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
 from school.models import Course, Lesson, Payments
-from school.permissions import IsModerator
+from school.permissions import IsModerator, IsOwner
 from school.serializers import CourseSerializer, LessonSerializer, PaymentsSerializer
 
 
@@ -12,7 +12,8 @@ from school.serializers import CourseSerializer, LessonSerializer, PaymentsSeria
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
-    permission_classes = [AllowAny]  # když dám IsModerator tak tam může jen harry potter - group:moderaator
+    permission_classes = [
+        IsAdminUser | IsModerator | IsOwner]  # když dám [IsModerator] tak tam může jen harry potter - group:moderaator
     # permission_classes = [IsAuthenticated]  # takhle se zamnkne, teď /courses/ může vidět jen s Acces_token
 
 
@@ -21,6 +22,7 @@ class LessonCreateAPIView(generics.CreateAPIView):  # POST
     serializer_class = LessonSerializer
     # neni potřeba queryset
     permission_classes = [IsAuthenticated]
+
 
 class LessonListAPIView(generics.ListAPIView):  # GET
     serializer_class = LessonSerializer
@@ -31,12 +33,13 @@ class LessonListAPIView(generics.ListAPIView):  # GET
 class LessonRetrieveAPIView(generics.RetrieveAPIView):  # GET
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    permission_classes = [IsAdminUser | IsModerator | IsOwner]
 
 
 class LessonUpdateAPIView(generics.UpdateAPIView):  # PATCH (může být 1 field)
-    serializer_class = LessonSerializer             # PUT (chce všechno)
+    serializer_class = LessonSerializer  # PUT (chce všechno)
     queryset = Lesson.objects.all()
-    permission_classes = [IsAdminUser or IsModerator]  # tohle není úplně hezké, ale teď to může Updatovat jen Admin nebo Moderator
+    permission_classes = [IsAdminUser | IsModerator | IsOwner]
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):  # DELETE
@@ -61,11 +64,11 @@ class PaymentsListAPIView(generics.ListAPIView):
     # http://localhost:8000/payments/?ordering=payment_date --- podle data
 
 
-# def is_superuser(user):
-#     """ tyhle permissions fungujou jen na funkce """
-#     return user.is_superuser
-#
-#
-# def is_moderator(user):
-#     """ tyhle permissions fungujou jen na funkce """
-#     return user.groups.filter(name='moderator').exists()
+class PaymentsUpdateAPIView(generics.UpdateAPIView):
+    serializer_class = PaymentsSerializer
+    queryset = Payments.objects.all()
+
+
+class PaymentsRetrieveAPIView(generics.RetrieveAPIView):
+    serializer_class = PaymentsSerializer
+    queryset = Payments.objects.all()

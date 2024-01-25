@@ -1,10 +1,14 @@
 from django.db import models
 
+from config import settings
+
 
 class Course(models.Model):
     title = models.CharField(max_length=64, verbose_name="Course title")
     preview = models.ImageField(upload_to="course/", verbose_name="Course preview", null=True, blank=True)
     description = models.TextField(max_length=1024, verbose_name="Description")
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.title}"
@@ -22,6 +26,8 @@ class Lesson(models.Model):
     # počítat kolik lekcí má jeden course: bylo nutný spojit model Lesson s modelem Course
     # v Postman při přidávání lekce: "course" : 3, related_name= abych mohl callovat lekce přes Course
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="lessons", null=True, blank=True)
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.title}"
@@ -56,7 +62,7 @@ class Payments(models.Model):
         ("cash", "Cash"),
         ("transfer", "Transfer")
     ]
-    user = models.CharField(max_length=24, verbose_name="User")
+    user = models.CharField(max_length=24, verbose_name="User",null=True, blank=True)
     payment_date = models.DateField(verbose_name="Payment date")
     course_or_lesson = models.CharField(max_length=12, verbose_name="Paid course or lesson?", choices=COURSE_OR_LESSON,
                                         null=True, blank=True)

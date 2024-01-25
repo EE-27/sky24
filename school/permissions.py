@@ -7,6 +7,11 @@ class IsModerator(BasePermission):
         """ Jestli je user moderator """
         return request.user.groups.filter(name='moderator').exists()
 
+class IsOwner(BasePermission):
+    def has_permission(self, request, view):
+        print("IsOwner permission check")
+        return request.user == view.get_object().owner
+
 
 """
 práce v shell
