@@ -1,12 +1,24 @@
 Task 1
-    Configure the project to use JWT authorisation and close each endpoint with authorisation.
+    To save lessons and courses, implement an additional check to ensure that the materials do not
+    contain links to third-party resources other than youtube.com.
+
+    That is, links to videos can be attached to materials, but links to third-party educational
+    platforms or personal websites cannot.
 
 Task 2
-    Create a moderator group and give it rights to work with any lessons or courses,
-    but without the ability to delete or create new ones. Put the functionality of such a check into controllers.
+    Add a subscription model for course updates for the user.
+
+    You need to implement an endpoint to set a user's subscription and to remove a user's subscription.
+
+    In this case, when selecting course data, the user should be sent a sign of the current user's
+    subscription to the course. That is, it should provide information whether the user is subscribed
+    to course updates or not.
 
 Task 3
-    Describe access rights for objects so that users who are not members of the moderators group can see
-    and edit only their own courses and lessons.
+    Implement pagination to display all lessons and courses.
 
-    It is better to start groups through the admin and not to implement additional endpoints for this purpose.
+Task 4
+    Write tests that will check the correctness of CRUD lessons and the functionality of the
+    subscription to course updates.
+
+    Save the result of test coverage checking.

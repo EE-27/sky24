@@ -1,13 +1,18 @@
 from rest_framework import serializers
 
 from school.models import Course, Lesson, Payments
+from school.validators import LessonLinkValidator
 
 
 # pro generics takto:
 class LessonSerializer(serializers.ModelSerializer):
+    # link = serializers.CharField(validators=[LessonLinkValidator("link")])  # tak jak to psal Maslov mi to nejde,
+                                                                            # takhle podle chatGPT to jde....
     class Meta:
         model = Lesson
         fields = "__all__"
+        extra_kwargs = {"link": {"validators": [LessonLinkValidator(field='link')]}}  # takhle podle chatGPT to jde....
+        # validators = [LessonLinkValidator(field="link")] maslov nefunguje...
 
 
 class PaymentsSerializer(serializers.ModelSerializer):
