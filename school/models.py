@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 
 from config import settings
@@ -76,3 +77,7 @@ class Payments(models.Model):
     class Meta:
         verbose_name = "Payment"
         verbose_name_plural = "Payments"
+
+class Subscription(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)

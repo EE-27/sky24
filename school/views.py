@@ -1,9 +1,11 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, status
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from school.models import Course, Lesson, Payments
+from school.models import Course, Lesson, Payments, Subscription
 from school.permissions import IsModerator, IsOwner
 from school.serializers import CourseSerializer, LessonSerializer, PaymentsSerializer
 
@@ -72,3 +74,28 @@ class PaymentsUpdateAPIView(generics.UpdateAPIView):
 class PaymentsRetrieveAPIView(generics.RetrieveAPIView):
     serializer_class = PaymentsSerializer
     queryset = Payments.objects.all()
+
+class SubscribeToCourse(APIView):
+    def post(self, request, course_id):
+        user = request.user
+        course = Course.objects.get(id=course_id)
+
+        # Check if the subscription already exists
+        if not Subscription.objects.filter(user=user, course=course).exists():
+            Subscription.objects.create(user=user, course=course)
+            return Response({'message': 'Subscribed successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Already subscribed'}, status=status.HTTP_400_BAD_REQUEST)
+
+class UnsubscribeFromCourse(APIView):
+    def post(self, request, course_id):
+        user = request.user
+        course = Course.objects.get(id=course_id)
+
+        # Check if the subscription exists
+        subscription = Subscription.objects.filter(user=user, course=course).first()
+        if subscription:
+            subscription.delete()
+            return Response({'message': 'Unsubscribed successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Not subscribed'}, status=status.HTTP_400_BAD_REQUEST)

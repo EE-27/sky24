@@ -5,7 +5,7 @@ from rest_framework.routers import DefaultRouter
 
 from school.views import (CourseViewSet, LessonCreateAPIView, LessonListAPIView, LessonRetrieveAPIView,
                           LessonUpdateAPIView, LessonDestroyAPIView, PaymentsListAPIView, PaymentsUpdateAPIView,
-                          PaymentsRetrieveAPIView)
+                          PaymentsRetrieveAPIView, SubscribeToCourse, UnsubscribeFromCourse)
 
 app_name = SchoolConfig.name
 
@@ -24,4 +24,7 @@ urlpatterns = [
 
     path("payments/update/<int:pk>/",PaymentsUpdateAPIView.as_view(), name="payments_update"),
     path("payments/<int:pk>/", PaymentsRetrieveAPIView.as_view(), name="payments_get "),
+
+    path('subscribe/<int:course_id>/', SubscribeToCourse.as_view(), name='subscribe-to-course'),
+    path('unsubscribe/<int:course_id>/', UnsubscribeFromCourse.as_view(), name='unsubscribe-from-course'),
 ] + router.urls

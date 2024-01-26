@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from school.models import Course, Lesson, Payments
+from school.models import Course, Lesson, Payments, Subscription
 from school.validators import LessonLinkValidator
 
 
@@ -34,6 +34,7 @@ class CourseSerializer(serializers.ModelSerializer):
     # a many=True, protože Maslov...
     lesson = LessonSerializer(source="lessons", many=True, read_only=True)
 
+    is_subscribed = serializers.SerializerMethodField()
     class Meta:
         model = Course
         fields = "__all__"
@@ -42,3 +43,14 @@ class CourseSerializer(serializers.ModelSerializer):
         # počítat kolik lekcí má jeden course - a pak tady počítám lekce
         # related_name="lessons", abych mohl callovat lekce přes Course
         return lessons_count.lessons.count()
+
+    def get_is_subscribed(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            return Subscription.objects.filter(user=user, course=obj).exists()
+        return False
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = '__all__'
