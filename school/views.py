@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from school.models import Course, Lesson, Payments, Subscription
+from school.pagination import LessonPagination, CoursePagination
 from school.permissions import IsModerator, IsOwner
 from school.serializers import CourseSerializer, LessonSerializer, PaymentsSerializer
 
@@ -14,6 +15,7 @@ from school.serializers import CourseSerializer, LessonSerializer, PaymentsSeria
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
+    pagination_class = CoursePagination
     permission_classes = [
         IsAdminUser | IsModerator | IsOwner]  # když dám [IsModerator] tak tam může jen harry potter - group:moderaator
     # permission_classes = [IsAuthenticated]  # takhle se zamnkne, teď /courses/ může vidět jen s Acces_token
@@ -29,6 +31,7 @@ class LessonCreateAPIView(generics.CreateAPIView):  # POST
 class LessonListAPIView(generics.ListAPIView):  # GET
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    pagination_class = LessonPagination
     permission_classes = [AllowAny]
 
 
