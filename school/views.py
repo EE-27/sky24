@@ -8,27 +8,41 @@ from rest_framework.views import APIView
 from school.models import Course, Lesson, Payments, Subscription
 from school.pagination import LessonPagination, CoursePagination
 from school.permissions import IsModerator, IsOwner
-from school.serializers import CourseSerializer, LessonSerializer, PaymentsSerializer
+from school.serializers import CourseSerializer, LessonSerializer, PaymentsSerializer, SubscriptionSerializer
 
 
 # pro ViewSet stačí takto:
 class CourseViewSet(viewsets.ModelViewSet):
+    """ ViewSet for Courses
+    GET /courses/
+    POST /courses/
+    GET /courses/{id}/
+    PUT /courses/{id}/
+    PATCH /courses/{id}/
+    DELETE /courses/{id}/
+    """
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
     # pagination_class = CoursePagination  # na testy vypnout
-    permission_classes = [AllowAny] # [
-       #  IsAdminUser | IsModerator | IsOwner]  # když dám [IsModerator] tak tam může jen harry potter - group:moderaator
+    permission_classes = [AllowAny]  # [
+    #  IsAdminUser | IsModerator | IsOwner]  # když dám [IsModerator] tak tam může jen harry potter - group:moderaator
     # permission_classes = [IsAuthenticated]  # takhle se zamnkne, teď /courses/ může vidět jen s Acces_token
 
 
 # pro generics takto:
 class LessonCreateAPIView(generics.CreateAPIView):  # POST
+    """ Generics for Lesson
+    POST /lesson/create/
+    """
     serializer_class = LessonSerializer
     # neni potřeba queryset
     permission_classes = [AllowAny]
 
 
 class LessonListAPIView(generics.ListAPIView):  # GET
+    """ Generics for Lesson
+    GET /lesson/
+    """
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     pagination_class = LessonPagination
@@ -36,24 +50,37 @@ class LessonListAPIView(generics.ListAPIView):  # GET
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):  # GET
+    """ Generics for Lesson
+    GET /lesson/{id}/
+    """
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
-    permission_classes = [AllowAny]# [IsAdminUser | IsModerator | IsOwner]
+    permission_classes = [AllowAny]  # [IsAdminUser | IsModerator | IsOwner]
 
 
 class LessonUpdateAPIView(generics.UpdateAPIView):  # PATCH (může být 1 field)
+    """ Generics for Lesson
+    PUT /lesson/update/{id}/
+    PATCH /lesson/update/{id}/
+    """
     serializer_class = LessonSerializer  # PUT (chce všechno)
     queryset = Lesson.objects.all()
-    permission_classes = [AllowAny]#[IsAdminUser | IsModerator | IsOwner]
+    permission_classes = [AllowAny]  # [IsAdminUser | IsModerator | IsOwner]
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):  # DELETE
+    """ Generics for Lesson
+    DELETE /lesson/delete/{id}/
+    """
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()  # Maslov ve videu o Generics tenhle řádek nemá,
-    permission_classes = [AllowAny]#[IsAuthenticated]  # mně to nešlo bez něj ¯\_(ツ)_/¯
+    permission_classes = [AllowAny]  # [IsAuthenticated]  # mně to nešlo bez něj ¯\_(ツ)_/¯
 
 
 class PaymentsListAPIView(generics.ListAPIView):
+    """ Generics for Payments
+    GET /payments/
+    """
     serializer_class = PaymentsSerializer
     queryset = Payments.objects.all()
 
@@ -70,35 +97,65 @@ class PaymentsListAPIView(generics.ListAPIView):
 
 
 class PaymentsUpdateAPIView(generics.UpdateAPIView):
+    """ Generics for Payments
+    PUT payments/update/{id}/
+    PATCH payments/update/{id}/
+    """
     serializer_class = PaymentsSerializer
     queryset = Payments.objects.all()
 
 
 class PaymentsRetrieveAPIView(generics.RetrieveAPIView):
+    """ Generics for Payments
+    GET /payments/{id}/
+    """
     serializer_class = PaymentsSerializer
     queryset = Payments.objects.all()
 
-class SubscribeToCourse(APIView):
-    def post(self, request, course_id):
-        user = request.user
-        course = Course.objects.get(id=course_id)
 
-        # Check if the subscription already exists
-        if not Subscription.objects.filter(user=user, course=course).exists():
-            Subscription.objects.create(user=user, course=course)
-            return Response({'message': 'Subscribed successfully'}, status=status.HTTP_200_OK)
-        else:
-            return Response({'message': 'Already subscribed'}, status=status.HTTP_400_BAD_REQUEST)
 
-class UnsubscribeFromCourse(APIView):
-    def post(self, request, course_id):
-        user = request.user
-        course = Course.objects.get(id=course_id)
+# class SubscribeToCourse(APIView):
+#     def post(self, request, course_id):
+#         user = request.user
+#         course = Course.objects.get(id=course_id)
+#
+#         # Check if the subscription already exists
+#         if not Subscription.objects.filter(user=user, course=course).exists():
+#             Subscription.objects.create(user=user, course=course)
+#             return Response({'message': 'Subscribed successfully'}, status=status.HTTP_200_OK)
+#         else:
+#             return Response({'message': 'Already subscribed'}, status=status.HTTP_400_BAD_REQUEST)
+#
+# class UnsubscribeFromCourse(APIView):
+#     def post(self, request, course_id):
+#         user = request.user
+#         course = Course.objects.get(id=course_id)
+#
+#         # Check if the subscription exists
+#         subscription = Subscription.objects.filter(user=user, course=course).first()
+#         if subscription:
+#             subscription.delete()
+#             return Response({'message': 'Unsubscribed successfully'}, status=status.HTTP_200_OK)
+#         else:
+#             return Response({'message': 'Not subscribed'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Check if the subscription exists
-        subscription = Subscription.objects.filter(user=user, course=course).first()
-        if subscription:
-            subscription.delete()
-            return Response({'message': 'Unsubscribed successfully'}, status=status.HTTP_200_OK)
-        else:
-            return Response({'message': 'Not subscribed'}, status=status.HTTP_400_BAD_REQUEST)
+class SubscriptionCreateAPIview(generics.CreateAPIView):
+    serializer_class = SubscriptionSerializer
+
+    def perform_create(self, serializer):
+        new_lesson = serializer.save()
+        new_lesson.owner = self.request.user
+        new_lesson.save()
+
+
+class SubscriptionUpdateAPIview(generics.UpdateAPIView):
+    serializer_class = SubscriptionSerializer
+    queryset = Subscription.objects.all()
+
+
+class SubscriptionDestroyAPIview(generics.DestroyAPIView):
+    queryset = Subscription.objects.all()
+
+class SubscriptionListAPIView(generics.ListAPIView):
+    serializer_class = SubscriptionSerializer
+    queryset = Subscription.objects.all()

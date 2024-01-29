@@ -20,6 +20,9 @@ class Course(models.Model):
 
 
 class Lesson(models.Model):
+    """
+    daw
+    """
     title = models.CharField(max_length=64, verbose_name="Lesson title")
     description = models.TextField(max_length=1024, verbose_name="Description")
     preview = models.ImageField(upload_to="lesson/", verbose_name="Lesson preview", null=True, blank=True)
@@ -81,3 +84,4 @@ class Payments(models.Model):
 class Subscription(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    subscritpion = models.BooleanField(verbose_name="Subscribed?", default=False)

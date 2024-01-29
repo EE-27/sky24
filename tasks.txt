@@ -1,24 +1,22 @@
 Task 1
-    To save lessons and courses, implement an additional check to ensure that the materials do not
-    contain links to third-party resources other than youtube.com.
-
-    That is, links to videos can be attached to materials, but links to third-party educational
-    platforms or personal websites cannot.
+    Connect and configure documentation output for the project. Make sure that each of the implemented
+    endpoints is described correctly in the documentation, if necessary, describe them manually.
 
 Task 2
-    Add a subscription model for course updates for the user.
+    Connect the ability to pay for courses via https://stripe.com/docs/api.
 
-    You need to implement an endpoint to set a user's subscription and to remove a user's subscription.
+    Access can be obtained directly from the documentation, and a simple registration
+    can be done at https://dashboard.stripe.com/register.
 
-    In this case, when selecting course data, the user should be sent a sign of the current user's
-    subscription to the course. That is, it should provide information whether the user is subscribed
-    to course updates or not.
+    To work with requests, you will need to implement access to endpoints:
 
-Task 3
-    Implement pagination to display all lessons and courses.
+ https://stripe.com/docs/api/payment_intents/create - create payment;
+ https://stripe.com/docs/api/payment_intents/retrieve - receiving payment.
+    You can use card numbers from the documentation for testing:
 
-Task 4
-    Write tests that will check the correctness of CRUD lessons and the functionality of the
-    subscription to course updates.
+ https://stripe.com/docs/terminal/references/testing#standard-test-cards
+    Connecting payment is best viewed as a normal task of connecting to a third-party API.
 
-    Save the result of test coverage checking.
+    The main path: purchase request → payment. There is no need to check the status.
+
+    Each acquirer provides test cards for working with virtual money.
