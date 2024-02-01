@@ -1,3 +1,5 @@
+import requests
+import stripe
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, generics, status
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -113,7 +115,6 @@ class PaymentsRetrieveAPIView(generics.RetrieveAPIView):
     queryset = Payments.objects.all()
 
 
-
 # class SubscribeToCourse(APIView):
 #     def post(self, request, course_id):
 #         user = request.user
@@ -156,6 +157,100 @@ class SubscriptionUpdateAPIview(generics.UpdateAPIView):
 class SubscriptionDestroyAPIview(generics.DestroyAPIView):
     queryset = Subscription.objects.all()
 
+
 class SubscriptionListAPIView(generics.ListAPIView):
     serializer_class = SubscriptionSerializer
     queryset = Subscription.objects.all()
+
+
+class CoursePaymentCreateAPIView(generics.CreateAPIView):
+    serializer_class = CourseSerializer
+
+class CoursePaymentListAPIView(generics.ListAPIView):
+    serializer_class = CourseSerializer
+    queryset = Course.objects.all()
+
+
+    # def payment_create(self, request):
+    #     stripe.api_key = "sk_test_51OeCgjBVY8RAQhG3hJ8Hs8PraP29hbB8lBal33CM3OYWMKkkNXW9dcVHaMtxGmOy4FvZiDwy1ahbbPytfQcSVWsf007kbIKswV"
+    #
+    #     # Create a Product on Stripe
+    #     product_data = {
+    #         'name': 'Starter Setup',  # Adjust the name as needed
+    #         'type':"service",
+    #     }
+    #     response = requests.post('https://api.stripe.com/v1/products', data=product_data,
+    #                              headers={'Authorization': f'Bearer {stripe.api_key}'})
+    #
+    #     # Check if the product creation was successful
+    #     if response.status_code != 200:
+    #         return Response({'error': f'Failed to create product on Stripe: {response.text}'},
+    #                         status=response.status_code)
+    #
+    #
+    #     product_response = response.json()
+    #     product_id = product_response.get('id')
+    #
+    #     # Create a Price for the Product
+    #     price_data = {
+    #         'product': product_id,
+    #         'unit_amount': 2000,
+    #         'currency': 'usd'
+    #     }
+    #     response = requests.post('https://api.stripe.com/v1/prices', data=price_data,
+    #                              headers={'Authorization': f'Bearer {stripe.api_key}'})
+    #
+    #     # Check if the price creation was successful
+    #     if response.status_code != 200:
+    #         return Response({'error': f'Failed to create price on Stripe: {response.text}'},
+    #                         status=response.status_code)
+    #
+    #
+    #     price_response = response.json()
+    #     price_id = price_response.get("id")
+    #
+    #
+    #     # Create a PaymentLink
+    #     payment_link_data = {
+    #         'line_items': [{'price': price_id, 'quantity': 1}]
+    #     }
+    #     payment_link_response = stripe.PaymentLink.create(**payment_link_data)
+    #     print(payment_link_response["url"])
+    #     return Response({'payment_link_url': payment_link_response.url}, status=status.HTTP_200_OK)
+
+        # product = stripe.Product.create(
+        #     name=f"{Course.title}",
+        #     default_price_data={"unit_amount": Course.price, "currency": "usd"},
+        #     expand=["default_price"],
+        # )
+        #
+        # data = {'name': f"{Course.title}", "default_price_data":{"unit_amount": Course.price, "currency": "usd"}, 'expand': ["default_price"]}
+        # response = self.client.post('v1/products/', data)
+        # price = stripe.Price.create(
+        #     product=product,
+        #     unit_amount=Course.price,
+        #     currency="czk",
+        #     recurring={"interval": "month"},
+        # )
+        # payment_link = stripe.PaymentLink.create(
+        #     line_items=[{"price": price, "quantity": 1}],
+        # )
+        #
+        # # You can create a new course instance or update an existing one here
+        # # For demonstration purposes, assuming you have a Course model
+        # course_data = {
+        #     "title": "Your Course Title",
+        #     "description": "Your Course Description",
+        #     "amount": 1991,  # Adjust the amount based on your use case
+        #     "currency": "usd",
+        #     # Add other course fields as needed
+        # }
+        #
+        # # Assuming you have a Course model, create or update the course
+        # course_serializer = CourseSerializer(data=course_data)
+        # if course_serializer.is_valid():
+        #     course_instance = course_serializer.save()
+        #     return Response({
+        #         'course': course_serializer.data,
+        #         'payment_link_url': payment_link.url
+        #     }, status=status.HTTP_200_OK)

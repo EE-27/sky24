@@ -20,3 +20,4 @@ Task 2
     The main path: purchase request → payment. There is no need to check the status.
 
     Each acquirer provides test cards for working with virtual money.
+

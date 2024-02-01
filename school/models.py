@@ -9,6 +9,9 @@ class Course(models.Model):
     preview = models.ImageField(upload_to="course/", verbose_name="Course preview", null=True, blank=True)
     description = models.TextField(max_length=1024, verbose_name="Description")
 
+    price = models.IntegerField(default=1991)
+    currency = models.CharField(max_length=3, default="usd")
+
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
@@ -20,9 +23,7 @@ class Course(models.Model):
 
 
 class Lesson(models.Model):
-    """
-    daw
-    """
+
     title = models.CharField(max_length=64, verbose_name="Lesson title")
     description = models.TextField(max_length=1024, verbose_name="Description")
     preview = models.ImageField(upload_to="lesson/", verbose_name="Lesson preview", null=True, blank=True)
