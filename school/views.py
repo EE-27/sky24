@@ -9,6 +9,7 @@ from school.models import Course, Lesson, Payments, Subscription
 from school.pagination import LessonPagination, CoursePagination
 from school.permissions import IsModerator, IsOwner
 from school.serializers import CourseSerializer, LessonSerializer, PaymentsSerializer, SubscriptionSerializer
+from school.tasks import process_payment
 
 
 # pro ViewSet stačí takto:
@@ -75,6 +76,17 @@ class LessonDestroyAPIView(generics.DestroyAPIView):  # DELETE
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()  # Maslov ve videu o Generics tenhle řádek nemá,
     permission_classes = [AllowAny]  # [IsAuthenticated]  # mně to nešlo bez něj ¯\_(ツ)_/¯
+
+
+class PaymentsCreateAPIView(generics.CreateAPIView):  # POST
+    """ Generics for Payments
+    POST /payments/create/
+    """
+    serializer_class = PaymentsSerializer
+
+    def perform_create(self, serializer):
+        new_payment = serializer.save()
+        process_payment.delay(new_payment.id)
 
 
 class PaymentsListAPIView(generics.ListAPIView):

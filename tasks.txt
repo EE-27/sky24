@@ -20,3 +20,18 @@ Task 2
     The main path: purchase request → payment. There is no need to check the status.
 
     Each acquirer provides test cards for working with virtual money.
+
+
+Task 1
+    Set up the project to work with Celery. Also configure Celery-beat to perform subsequent tasks.
+
+Task 2
+    Earlier, you implemented a feature to subscribe to course updates. Now add asynchronous emailing to users about
+       updates to course materials.
+
+* Next task A user can update each course lesson separately. Add a check to only send notifications if the course has
+  not been updated for more than 4 hours.
+
+Task 3
+    Use celery-beat to implement a background task that will check the user by last_login, and if the user has not
+    logged in for more than a month, block the user using the is_active flag.

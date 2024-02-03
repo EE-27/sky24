@@ -142,3 +142,33 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.IsAuthenticated',
     ]  # v Postman, teď všechno chce: v Headers napsat: Authorization: Bearer <<access_token>> z /users/api/token/
 }
+
+CACHE_ENABLED = True
+
+
+if CACHE_ENABLED:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": "redis://127.0.0.1:6379/",  # nezapomenout si zpustit redis-server
+        }
+    }
+
+
+# Settings for Celery
+
+# URL of the message broker
+CELERY_BROKER_URL = 'redis://localhost:6379/' # For example, Redis, which runs on port 6379 by default
+
+# URL of the results broker, also Redis
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+
+# Time zone for Celery operation
+CELERY_TIMEZONE = "Australia/Tasmania"
+
+# Task tracking flag
+CELERY_TASK_TRACK_STARTED = True
+
+# Maximum time to complete a task
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
