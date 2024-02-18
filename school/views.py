@@ -9,7 +9,10 @@ from school.models import Course, Lesson, Payments, Subscription
 from school.pagination import LessonPagination, CoursePagination
 from school.permissions import IsModerator, IsOwner
 from school.serializers import CourseSerializer, LessonSerializer, PaymentsSerializer, SubscriptionSerializer
-from school.tasks import process_payment
+
+from school.tasks import print_hello_world
+
+result = print_hello_world.delay()
 
 
 # pro ViewSet stačí takto:
@@ -84,9 +87,9 @@ class PaymentsCreateAPIView(generics.CreateAPIView):  # POST
     """
     serializer_class = PaymentsSerializer
 
-    def perform_create(self, serializer):
-        new_payment = serializer.save()
-        process_payment.delay(new_payment.id)
+    # def perform_create(self, serializer):
+    #     new_payment = serializer.save()
+    #     process_payment.delay(new_payment.id)
 
 
 class PaymentsListAPIView(generics.ListAPIView):

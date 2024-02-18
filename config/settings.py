@@ -181,12 +181,12 @@ EMAIL_USE_SSL = True
 
 # Nastavení pro Celer
 CELERY_BEAT_SCHEDULE = {
-    "ccc": {
-        "task": 'school.tasks.ccc',
-        'schedule': datetime.timedelta(seconds=1)
+    "print-hello-world": {
+        "task": 'school.tasks.print_hello_world',
+        'schedule': 1.0,
     },
-    'check_last_login': {
-        'task': 'school.tasks.check_last_login',  # Cesta k úkolu
-        'schedule': datetime.timedelta(seconds=1),  # Plán provádění úloh (např. jednou denně)
-    },
+    # 'check_last_login': {
+    #     'task': 'school.tasks.check_last_login',  # Cesta k úkolu
+    #     'schedule': datetime.timedelta(seconds=1),  # Plán provádění úloh (např. jednou denně)
+    # },
 }
