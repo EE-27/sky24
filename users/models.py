@@ -10,6 +10,10 @@ class User(AbstractUser):
     city = models.CharField(max_length=64, verbose_name="City",null=True, blank=True)
     avatar = models.ImageField(upload_to="users/", verbose_name="Avatar", null=True, blank=True)
 
+    #celer
+    is_active = models.BooleanField(default=True)
+    last_login = models.DateField(default="2024-1-1")
+
     username = None
     email = models.EmailField(unique=True, verbose_name="Mail")
 

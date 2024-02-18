@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+import datetime
 import os
 from pathlib import Path
 from dotenv import load_dotenv
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
 
     "rest_framework",
     "drf_yasg",
+    "django_celery_beat",
 
     "users",
     "school",
@@ -113,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Prague'
 
 USE_I18N = True
 
@@ -136,15 +138,14 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': [
-         "rest_framework.permissions.AllowAny"
-            # AllowAny - teď to pustí všechny
+        "rest_framework.permissions.AllowAny"
+        # AllowAny - teď to pustí všechny
 
         # 'rest_framework.permissions.IsAuthenticated',
     ]  # v Postman, teď všechno chce: v Headers napsat: Authorization: Bearer <<access_token>> z /users/api/token/
 }
 
 CACHE_ENABLED = True
-
 
 if CACHE_ENABLED:
     CACHES = {
@@ -154,21 +155,38 @@ if CACHE_ENABLED:
         }
     }
 
-
 # Settings for Celery
 
-# URL of the message broker
-CELERY_BROKER_URL = 'redis://localhost:6379/' # For example, Redis, which runs on port 6379 by default
+# # URL of the message broker
+# CELERY_BROKER_URL = 'redis://127.0.0.1:6379/'  # For example, Redis, which runs on port 6379 by default
+#
+# # URL of the results broker, also Redis
+# CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+#
+# # Time zone for Celery operation
+# CELERY_TIMEZONE = "Europe/Prague"
+#
+# # Task tracking flag
+# CELERY_TASK_TRACK_STARTED = True
 
-# URL of the results broker, also Redis
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 
-# Time zone for Celery operation
-CELERY_TIMEZONE = "Australia/Tasmania"
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
 
-# Task tracking flag
-CELERY_TASK_TRACK_STARTED = True
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'fuckup@oscarbot.ru'
+EMAIL_HOST_PASSWORD = 'AsTSNVv7pun9'
+EMAIL_USE_SSL = True
 
-# Maximum time to complete a task
-CELERY_TASK_TIME_LIMIT = 30 * 60
-
+# Nastavení pro Celer
+CELERY_BEAT_SCHEDULE = {
+    "ccc": {
+        "task": 'school.tasks.ccc',
+        'schedule': datetime.timedelta(seconds=1)
+    },
+    'check_last_login': {
+        'task': 'school.tasks.check_last_login',  # Cesta k úkolu
+        'schedule': datetime.timedelta(seconds=1),  # Plán provádění úloh (např. jednou denně)
+    },
+}
